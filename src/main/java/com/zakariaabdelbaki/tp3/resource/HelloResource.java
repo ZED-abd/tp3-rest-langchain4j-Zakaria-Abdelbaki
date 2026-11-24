@@ -14,6 +14,7 @@ public class HelloResource {
     @Path("personnes/{nom}")
     @Produces(MediaType.TEXT_PLAIN)
     public Response hello(@PathParam("nom") String nom) {
-        return Response.ok("Hello, " + nom).build();
+        // return Response.ok("Hello, " + nom).build();
+        return Response.serverError().build();
     }
 }
