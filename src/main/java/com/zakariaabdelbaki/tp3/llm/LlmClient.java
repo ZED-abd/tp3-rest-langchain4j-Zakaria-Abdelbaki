@@ -13,7 +13,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class LlmClient {
 
-    private static final String MODELE = "gemini-3.1-flash-lite";
+    private static final String MODELE = "gemini-3.5-flash-lite";
 
     private Client gemini;
     private GuideTouristique assistant;
@@ -40,8 +40,8 @@ public class LlmClient {
         assistant = AiServices.create(GuideTouristique.class, modele);
     }
 
-    public String guide(String lieu) {
-        return assistant.guide(lieu);
+    public String guide(int nb, String lieu) {
+        return assistant.guide(nb, lieu);
     }
 
     @PreDestroy

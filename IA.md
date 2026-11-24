@@ -7,3 +7,5 @@ Pour le projet initial, Codex a écrit le POM et les deux classes REST. Le nom d
 Codex a réalisé les variantes de l’introduction JAX-RS, testé le retour du lieu puis du tableau et enregistré les réponses de Payara. Il a adapté le client du TP 2 pour partager le modèle entre les requêtes et supprimer la mémoire de conversation.
 
 Pour l’appel Gemini, Codex a rédigé le message système, configuré le mode JSON et limité les tentatives dans LangChain4j et le SDK Google. Il a ajouté la lecture JSON-P et les réponses HTTP en cas d’indisponibilité ou de réponse invalide.
+
+Pour le bonus, Codex a ajouté le paramètre de requête `nb`, vérifié ses limites avant l’appel au modèle et transmis sa valeur à l’interface avec `@V("nb")`. Après deux erreurs 503 sur Nice avec le modèle 3.1, il a choisi le modèle Flash-Lite 3.5 pour les essais de Paris et du Maroc. Il a également préparé le brouillon local du courriel à partir des captures de test.

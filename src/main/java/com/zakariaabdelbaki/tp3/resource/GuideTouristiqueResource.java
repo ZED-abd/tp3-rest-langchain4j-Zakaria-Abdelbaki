@@ -9,10 +9,12 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonString;
 import jakarta.json.stream.JsonParser;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -29,19 +31,31 @@ public class GuideTouristiqueResource {
      * Donne les endroits à visiter et le prix moyen d'un repas en devise locale.
      *
      * @param lieu nom de la ville ou du pays
-     * @return le guide au format JSON, ou une erreur si le guide est indisponible
+     * @param nombre nombre d’endroits à visiter, entre 1 et 10 (2 par défaut)
+     * @return le guide au format JSON ou une réponse d’erreur
      */
     @GET
     @Path("lieu/{ville_ou_pays}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response endroitsDeVisite(@PathParam("ville_ou_pays") String lieu) {
+    public Response endroitsDeVisite(@PathParam("ville_ou_pays") String lieu,
+                                    @QueryParam("nb") @DefaultValue("2") String nombre) {
+        int nb;
+        try {
+            nb = Integer.parseInt(nombre);
+        } catch (NumberFormatException e) {
+            return erreur(Response.Status.BAD_REQUEST, "Le paramètre nb doit être un entier.");
+        }
+        if (nb < 1 || nb > 10) {
+            return erreur(Response.Status.BAD_REQUEST, "Le paramètre nb doit être compris entre 1 et 10.");
+        }
+
         String reponse;
         try {
-            reponse = client.guide(lieu);
+            reponse = client.guide(nb, lieu);
         } catch (RuntimeException e) {
             return erreur(Response.Status.SERVICE_UNAVAILABLE, "Le guide est momentanément indisponible.");
         }
-        if (!guideValide(reponse, 2)) {
+        if (!guideValide(reponse, nb)) {
             return erreur(Response.Status.BAD_GATEWAY, "Le guide reçu est invalide.");
         }
         return Response.ok(reponse).build();
